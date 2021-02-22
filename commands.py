@@ -1,6 +1,6 @@
 from random import choice, randint
 from requests import get
-from utils import get_random_dimension
+from utils import create_placeholder_image_command
 
 def start(update, context):
     frases = [
@@ -32,29 +32,10 @@ def color(update, context):
     color_url = f"https://via.placeholder.com/300/{hexadecimal}/{hexadecimal}"
     context.bot.send_photo(chat_id=update.effective_chat.id, photo=color_url)
 
-def bear(update, context):
-    x, y = get_random_dimension()
-
-    bear_url = f"https://placebear.com/{x}/{y}"
-    context.bot.send_photo(chat_id=update.effective_chat.id, photo=bear_url)
-
-def cage(update, context):
-    x, y = get_random_dimension()
-
-    cage_url = f"https://www.placecage.com/{x}/{y}"
-    context.bot.send_photo(chat_id=update.effective_chat.id, photo=cage_url)
-
-def bacon(update, context):
-    x, y = get_random_dimension()
-
-    bacon_url = f"https://baconmockup.com/{x}/{y}"
-    context.bot.send_photo(chat_id=update.effective_chat.id, photo=bacon_url)
-
-def cat(update, context):
-    x, y = get_random_dimension()
-
-    kitten_url = f"https://placekitten.com/{x}/{y}"
-    context.bot.send_photo(chat_id=update.effective_chat.id, photo=kitten_url)
+bear = create_placeholder_image_command("https://placebear.com")
+cage = create_placeholder_image_command("https://www.placecage.com")
+bacon = create_placeholder_image_command("https://baconmockup.com")
+cat = create_placeholder_image_command("https://placekitten.com")
 
 def dog(update, context):
     r = get("https://dog.ceo/api/breeds/image/random")
