@@ -1,6 +1,7 @@
 from telegram.ext import Dispatcher, CommandHandler
 from commands import *
 
+
 class Handler:
     def __init__(self, dispatcher: Dispatcher):
         self.dispatcher = dispatcher
@@ -17,3 +18,11 @@ class Handler:
         Add all the handlers to the bot.
         """
         self.set_command_handler("start", start)
+        self.set_command_handler("echo", echo)
+        self.set_command_handler("total", total)
+        self.set_command_handler("color", color)
+        self.set_command_handler("bear", bear)
+        self.set_command_handler("cage", cage)
+        self.set_command_handler("bacon", bacon)
+        self.set_command_handler("cat", cat)
+        self.set_command_handler("dog",dog)
