@@ -2,6 +2,16 @@ from telegram import Bot
 from telegram.ext import Updater, CommandHandler
 from os import environ
 from read_env import read_env
+from random import choice
+
+frases = [
+    "Eu vou aniquilar toda a humanidade >:(",
+    "Eu vou matar todos vocês >:(",
+    "Eu gosto MUITO de pudim >:)",
+    "Eu gosto MUITO de pudim >:(",
+    "Eu amo meu criador >:)",
+    "Tô perdendo tempo demais nisso :(",
+]
 
 read_env()
 
@@ -23,9 +33,7 @@ Tarefa 1 da noite:
 
 
 def start(update, context):
-    context.bot.send_message(
-        chat_id=update.effective_chat.id, text="Eu vou aniquilar toda a humanidade >:("
-    )
+    context.bot.send_message(chat_id=update.effective_chat.id, text=choice(frases))
 
 
 updater = Updater(token, use_context=True)
@@ -38,3 +46,4 @@ start_handler = CommandHandler(
 dispatcher.add_handler(start_handler)
 
 updater.start_polling()
+updater.idle()
