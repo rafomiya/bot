@@ -20,3 +20,4 @@ class Handler:
         self.set_command_handler("start", start)
         self.set_command_handler("echo", echo)
         self.set_command_handler("total", total)
+        self.set_command_handler("color", color)

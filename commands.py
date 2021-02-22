@@ -27,3 +27,9 @@ def total(update, context):
     total = sum(nums)
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=total)
+
+
+def color(update, context):
+    _, hexadecimal = update.message.text.split()
+    color_url = f"https://via.placeholder.com/300/{hexadecimal}/{hexadecimal}"
+    context.bot.send_photo(chat_id=update.effective_chat.id, photo=color_url)
