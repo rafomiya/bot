@@ -21,3 +21,8 @@ class Handler:
         self.set_command_handler("echo", echo)
         self.set_command_handler("total", total)
         self.set_command_handler("color", color)
+        self.set_command_handler("bear", bear)
+        self.set_command_handler("cage", cage)
+        self.set_command_handler("bacon", bacon)
+        self.set_command_handler("cat", cat)
+        self.set_command_handler("dog",dog)
