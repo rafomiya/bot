@@ -25,4 +25,4 @@ class Handler:
         self.set_command_handler("cage", cage)
         self.set_command_handler("bacon", bacon)
         self.set_command_handler("cat", cat)
-        self.set_command_handler("dog",dog)
+        self.set_command_handler("dog", dog)
