@@ -1,5 +1,6 @@
 from random import choice, randint
 from requests import get
+from utils import get_random_dimension
 
 def start(update, context):
     frases = [
@@ -13,11 +14,9 @@ def start(update, context):
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=choice(frases))
 
-
 def echo(update, context):  # /echo abcdefghijklmnopqrtstuvwxyz
     answer = " ".join(update.message.text.split()[1:])
     context.bot.send_message(chat_id=update.effective_chat.id, text=answer)
-
 
 def total(update, context):
     nums_str = update.message.text.split()[1:]
@@ -28,44 +27,34 @@ def total(update, context):
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=total)
 
-
 def color(update, context):
     _, hexadecimal = update.message.text.split()
     color_url = f"https://via.placeholder.com/300/{hexadecimal}/{hexadecimal}"
     context.bot.send_photo(chat_id=update.effective_chat.id, photo=color_url)
 
-
 def bear(update, context):
-    x = randint(300, 1000)
-    y = randint(300, 1000)
+    x, y = get_random_dimension()
 
     bear_url = f"https://placebear.com/{x}/{y}"
     context.bot.send_photo(chat_id=update.effective_chat.id, photo=bear_url)
 
-
 def cage(update, context):
-    x = randint(300, 1000)
-    y = randint(300, 1000)
+    x, y = get_random_dimension()
 
     cage_url = f"https://www.placecage.com/{x}/{y}"
     context.bot.send_photo(chat_id=update.effective_chat.id, photo=cage_url)
 
-
 def bacon(update, context):
-    x = randint(300, 1000)
-    y = randint(300, 1000)
+    x, y = get_random_dimension()
 
     bacon_url = f"https://baconmockup.com/{x}/{y}"
     context.bot.send_photo(chat_id=update.effective_chat.id, photo=bacon_url)
 
-
 def cat(update, context):
-    x = randint(300, 1000)
-    y = randint(300, 1000)
+    x, y = get_random_dimension()
 
     kitten_url = f"https://placekitten.com/{x}/{y}"
     context.bot.send_photo(chat_id=update.effective_chat.id, photo=kitten_url)
-
 
 def dog(update, context):
     r = get("https://dog.ceo/api/breeds/image/random")
@@ -79,4 +68,3 @@ def dog(update, context):
     json = r.json()
     dog_url = json["message"]
     context.bot.send_photo(chat_id=update.effective_chat.id, photo=dog_url)
-
