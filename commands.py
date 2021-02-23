@@ -1,7 +1,8 @@
+import telegram
+import logging
 from random import choice, randint
 from requests import get
 from os import environ
-from urllib.parse import quote_plus
 from utils import create_placeholder_image_command
 
 
@@ -19,7 +20,7 @@ def start(update, context):
         chat_id=update.effective_chat.id, text=choice(frases))
 
 
-def echo(update, context):  # /echo abcdefghijklmnopqrtstuvwxyz
+def echo(update, context):
     answer = " ".join(update.message.text.split()[1:])
     context.bot.send_message(chat_id=update.effective_chat.id, text=answer)
 
@@ -61,7 +62,7 @@ def color(update, context):
 
     if not someone_worked:
         context.bot.send_message(
-            chat_id=update.effective_chat.id, text="I had a trouble with my dependencies |:(")
+            chat_id=update.effective_chat.id, text="Perdão, deu erro nas minhas dependências |:(")
 
 
 bear = create_placeholder_image_command("https://placebear.com")
@@ -87,30 +88,54 @@ def dog(update, context):
 
 
 def image(update, context):
-    complete_message = update.message.text.split()
-    search = quote_plus(" ".join(complete_message[1:]))
-    unsplash_token = environ["UNSPLASH_TOKEN"]
-    request = get(
-        f"https://api.unsplash.com//search/photos/?query={search}&per_page=30&page=5&client_id={unsplash_token}"
-    )
+    message_parts = update.message.text.split()
+
+    params = {
+        "query": " ".join(message_parts[1:]),
+        "per_page": 30,
+        "lang": update.message.from_user.language_code,
+        "client_id": environ["UNSPLASH_TOKEN"],
+    }
+
+    request = get("https://api.unsplash.com/search/photos", params)
 
     json = request.json()
-    if json["total"] == 0:
+
+    if json["total"] > 0:
+        image = choice(json["results"])
+        alt_text = image['alt_description']
+        credit_url = image['links']['html']
+
+        caption_text = f"{alt_text}\n" if alt_text != None else ""
+        caption_text += f"credits: {credit_url}"
+
+        someone_worked = False
+
+        for size_option, image_url in image["urls"].items():
+            # RAW size is so much bigger than viable
+            if size_option == "raw":
+                continue
+
+            try:
+                context.bot.send_photo(
+                    chat_id=update.effective_chat.id,
+                    photo=image_url,
+                    caption=caption_text,
+                    reply_to_message_id=update.message.message_id
+                )
+                someone_worked = True
+                break
+            except telegram.error.BadRequest:
+                logging.warning(
+                    f"Bad request error happened when tried to get the following image URL (trying another size option): {image_url}")
+
+        if not someone_worked:
+            logging.error(
+                "Was not returned any image because all size options failed")
+            context.bot.send_message(
+                chat_id=update.effective_chat.id, text="Perdão, deu erro nas minhas dependências |:(")
+    else:
         context.bot.send_message(
             chat_id=update.effective_chat.id,
             text="Não há imagens que correspondem à pesquisa.",
         )
-    else:
-        image = choice(json["results"])
-        if image["alt_description"] != None:
-            context.bot.send_photo(
-                chat_id=update.effective_chat.id,
-                photo=image["urls"]["full"],
-                caption=f"{image['alt_description']}\ncredits: {image['links']['html']}",
-            )
-        else:
-            context.bot.send_photo(
-                chat_id=update.effective_chat.id,
-                photo=image["urls"]["full"],
-                caption=f"credits: {image['links']['html']}",
-            )
