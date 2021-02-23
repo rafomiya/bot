@@ -1,6 +1,7 @@
 from telegram.ext import Updater
 from handler import Handler
 
+
 def get_updater(token: str) -> Updater:
     """
     Returns a instancied updater
@@ -10,5 +11,5 @@ def get_updater(token: str) -> Updater:
 
     handler = Handler(updater.dispatcher)
     handler.add_handlers()
-    
+
     return updater

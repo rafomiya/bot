@@ -1,5 +1,6 @@
 from random import randint
 
+
 def get_random_dimension() -> tuple:
     """
     Returns an random dimension
@@ -9,6 +10,7 @@ def get_random_dimension() -> tuple:
     y = randint(300, 1000)
 
     return (x, y)
+
 
 def create_placeholder_image_command(api_host: str):
     """

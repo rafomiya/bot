@@ -1,12 +1,9 @@
 from random import choice, randint
 from requests import get
-<<<<<<< HEAD
 from os import environ
 from urllib.parse import quote_plus
-
-=======
 from utils import create_placeholder_image_command
->>>>>>> 7ab9b82ebaf1677eba064360f2ea9640a251cb64
+
 
 def start(update, context):
     frases = [
@@ -18,11 +15,14 @@ def start(update, context):
         "Tô perdendo tempo demais nisso\n:(",
     ]
 
-    context.bot.send_message(chat_id=update.effective_chat.id, text=choice(frases))
+    context.bot.send_message(
+        chat_id=update.effective_chat.id, text=choice(frases))
+
 
 def echo(update, context):  # /echo abcdefghijklmnopqrtstuvwxyz
     answer = " ".join(update.message.text.split()[1:])
     context.bot.send_message(chat_id=update.effective_chat.id, text=answer)
+
 
 def total(update, context):
     nums_str = update.message.text.split()[1:]
@@ -33,15 +33,42 @@ def total(update, context):
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=total)
 
+
 def color(update, context):
-    _, hexadecimal = update.message.text.split()
-    color_url = f"https://via.placeholder.com/300/{hexadecimal}/{hexadecimal}"
-    context.bot.send_photo(chat_id=update.effective_chat.id, photo=color_url)
+    resolution = 300
+    _, hex_color = update.message.text.split()
+
+    apis_options = [
+        "https://via.placeholder.com",
+        "https://dummyimage.com",
+        "https://fakeimg.pl"
+    ]
+
+    someone_worked = False
+
+    for option in apis_options:
+        color_url = f"{option}/{resolution}/{hex_color}/{hex_color}"
+
+        if get(color_url).ok:
+            """
+            If the service is up and running
+            properly, use it.
+            """
+            context.bot.send_photo(
+                chat_id=update.effective_chat.id, photo=color_url)
+            someone_worked = True
+            break
+
+    if not someone_worked:
+        context.bot.send_message(
+            chat_id=update.effective_chat.id, text="I had a trouble with my dependencies |:(")
+
 
 bear = create_placeholder_image_command("https://placebear.com")
 cage = create_placeholder_image_command("https://www.placecage.com")
 bacon = create_placeholder_image_command("https://baconmockup.com")
 cat = create_placeholder_image_command("https://placekitten.com")
+
 
 def dog(update, context):
     r = get("https://dog.ceo/api/breeds/image/random")
@@ -52,13 +79,11 @@ def dog(update, context):
                 break
         if not r.ok:
             context.bot.send_photo(
-                chat_id=update.effective_chat.id,
-                text="Perdão, deu erro em uma dependência :(",
-            )
+                chat_id=update.effective_chat.id, text="Perdão, deu erro em uma dependência :(")
+
     json = r.json()
     dog_url = json["message"]
     context.bot.send_photo(chat_id=update.effective_chat.id, photo=dog_url)
-<<<<<<< HEAD
 
 
 def image(update, context):
@@ -89,5 +114,3 @@ def image(update, context):
                 photo=image["urls"]["full"],
                 caption=f"credits: {image['links']['html']}",
             )
-=======
->>>>>>> 7ab9b82ebaf1677eba064360f2ea9640a251cb64
