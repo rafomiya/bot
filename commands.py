@@ -15,11 +15,11 @@ dependencies_error_message = Message(
 def start(update, context):
     frases = [
         Message(
-            en="I gonna annihilate all the humanity\n>:(",
+            en="I will annihilate all the humanity\n>:(",
             pt="Eu vou aniquilar toda a humanidade\n>:("
         ),
         Message(
-            en="I gonna kill you all\n>:(",
+            en="I will kill you all\n>:(",
             pt="Eu vou matar todos vocês\n>:("
         ),
         Message(
