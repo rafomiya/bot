@@ -4,20 +4,43 @@ from random import choice, randint
 from requests import get
 from os import environ
 from utils import create_placeholder_image_command
+from message import Message
+
+dependencies_error_message = Message(
+    en="Sorry, I had a trouble with my dependencies |:(",
+    pt="Perdão, deu erro nas minhas dependências |:("
+)
 
 
 def start(update, context):
     frases = [
-        "Eu vou aniquilar toda a humanidade\n>:(",
-        "Eu vou matar todos vocês\n>:(",
-        "Eu gosto MUITO de pudim\n>:)",
-        "Eu gosto MUITO de pudim\n>:(",
-        "Eu amo meu criador\n>:)",
-        "Tô perdendo tempo demais nisso\n:(",
+        Message(
+            en="I will annihilate all the humanity\n>:(",
+            pt="Eu vou aniquilar toda a humanidade\n>:("
+        ),
+        Message(
+            en="I will kill you all\n>:(",
+            pt="Eu vou matar todos vocês\n>:("
+        ),
+        Message(
+            en="I like pudding a lot\n>:)",
+            pt="Eu gosto MUITO de pudim\n>:)"
+        ),
+        Message(
+            en="I love my creator\n>:)",
+            pt="Eu amo meu criador\n>:)"
+        ),
+        Message(
+            en="I'm wasting too much tme on this\n:(",
+            pt="Tô perdendo tempo demais nisso\n:("
+        ),
     ]
 
     context.bot.send_message(
-        chat_id=update.effective_chat.id, text=choice(frases))
+        chat_id=update.effective_chat.id,
+        text=choice(frases).get_text(
+            update.message.from_user.language_code[:2])
+    )
 
 
 def echo(update, context):
@@ -62,7 +85,10 @@ def color(update, context):
 
     if not someone_worked:
         context.bot.send_message(
-            chat_id=update.effective_chat.id, text="Perdão, deu erro nas minhas dependências |:(")
+            chat_id=update.effective_chat.id,
+            text=dependencies_error_message.get_text(
+                update.message.from_user.language_code[:2])
+        )
 
 
 bear = create_placeholder_image_command("https://placebear.com")
@@ -80,7 +106,10 @@ def dog(update, context):
                 break
         if not r.ok:
             context.bot.send_photo(
-                chat_id=update.effective_chat.id, text="Perdão, deu erro em uma dependência :(")
+                chat_id=update.effective_chat.id,
+                text=dependencies_error_message.get_text(
+                    update.message.from_user.language_code[:2])
+            )
 
     json = r.json()
     dog_url = json["message"]
@@ -93,7 +122,7 @@ def image(update, context):
     params = {
         "query": " ".join(message_parts[1:]),
         "per_page": 30,
-        "lang": update.message.from_user.language_code,
+        "lang": update.message.from_user.language_code[:2],
         "client_id": environ["UNSPLASH_TOKEN"],
     }
 
@@ -133,7 +162,10 @@ def image(update, context):
             logging.error(
                 "Was not returned any image because all size options failed")
             context.bot.send_message(
-                chat_id=update.effective_chat.id, text="Perdão, deu erro nas minhas dependências |:(")
+                chat_id=update.effective_chat.id,
+                text=dependencies_error_message.get_text(
+                    update.message.from_user.language_code[:2])
+            )
     else:
         context.bot.send_message(
             chat_id=update.effective_chat.id,
